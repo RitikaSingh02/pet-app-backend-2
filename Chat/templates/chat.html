@@ -2,14 +2,14 @@
     <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     </head>
-
-    {{sender}}
-    {{receiver}}
     {% for i in msgs %}
-        {{i}}
+        <li id="last msgs">
+            {{i}}
+        </li>
     {%endfor%}
     <form id='form' method='POST'> 
-    <input type="text" id = "msg"/>
+        <li id="list"></li>
+    <input type="text" value="" id = "msg"/>
     <input type='submit' class='btn btn-primary'/>
     </form>
     <script>   
@@ -21,11 +21,18 @@
         wsstart = 'wss://';
     var endpoint = wsstart +window.location.host + window.location.pathname ;
     var socket = new WebSocket(endpoint);
+        
     socket.onmessage = (e)=>{
-        console.log("message" , e);
+        console.log(e.data)
+        var data = JSON.parse(e.data)
+        var sender = data['sender']
+        var new_msg = document.createElement("LI");  
+        var textnode = document.createTextNode(data['text'] +" via " + sender) ;   
+        new_msg.appendChild(textnode)
+        document.getElementById("list").appendChild(new_msg);
     }
     socket.onopen= (e)=>{
-        console.log("message" , e);
+        console.log("open" , e);
         formdata.submit(function(event){
             event.preventDefault();
             var msg = msgfield.val();
@@ -33,12 +40,10 @@
         })
     }
     socket.onerror= (e)=>{
-        console.log("message" , e);
+        console.log("error" , e);
     }
     socket.onclose= (e)=>{
-        console.log("message" , e);
+        console.log("closed" , e);
     }
-
-
     </script>
 </html>
