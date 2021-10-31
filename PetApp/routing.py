@@ -12,7 +12,7 @@ application = ProtocolTypeRouter({
             URLRouter(
                 [
                     # r'^index/$', views.index, name='index
-                    re_path(r"^chat/chat/(?P<username>\w+)/$" , ChatConsumer() , name="chatconsumer"),
+                    re_path(r"^chat/chat/(?P<username>\w+)/$" , ChatConsumer().as_asgi() , name="chatconsumer"),
                 ]
             )
         )
