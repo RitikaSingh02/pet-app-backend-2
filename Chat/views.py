@@ -11,7 +11,11 @@ def chat(request , username):
     params = {
         "receiver" : username , 
         "sender" : request.user ,
-        "msgs": list(Message.objects.filter(Q(author_id = request.user.id , receiver_id = receiver_id) | Q(receiver_id = request.user.id , author_id = receiver_id)).values_list('message' , 'timestamp' ))
         }
+    msg_query = list(Message.objects.filter(Q(author_id = request.user.id , receiver_id = receiver_id) | Q(receiver_id = request.user.id , author_id = receiver_id)).values('message'))
+    msgs = []
+    for msg in msg_query:
+        msgs.append(msg['message'])
+    params["msgs"] = msgs
     return render(request , "chat.html" , params )
 # Create your views here.
