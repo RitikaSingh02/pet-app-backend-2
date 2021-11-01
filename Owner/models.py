@@ -7,5 +7,11 @@ class UserInfo(models.Model):
     email = models.EmailField(max_length=200, default="NULL" , unique= True)
     password = models.CharField(max_length=200, default="NULL")
 
-    
-# Create your models here.
+class ForumInfo(models.Model):
+    forumname = models.CharField(max_length=200, default="Forum1" , unique= False)
+    description = models.CharField(max_length=200 , default="NULL" , unique=False)    
+    visibility = models.CharField(max_length=20 , default="PUBLIC" )
+
+class UserForum(models.Model):
+    forum = models.ForeignKey(ForumInfo, on_delete=models.CASCADE) 
+    user = models.ForeignKey(UserInfo, on_delete=models.CASCADE)    
