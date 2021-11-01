@@ -4,7 +4,9 @@
     </head>
     {% for i in msgs %}
         <li id="last msgs">
-            {{i}}
+            {%for j in i %}
+                {{j}}
+            {%endfor%}
         </li>
     {%endfor%}
     <form id='form' method='POST'> 
