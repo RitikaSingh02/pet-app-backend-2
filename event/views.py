@@ -6,6 +6,8 @@ from django.contrib.auth.decorators import login_required
 from .models import Events , EventTypes
 from .Scripts.event_script import create_event_type
 
+from datetime import datetime
+
 @login_required
 def event_create(request):
     res = {}
@@ -13,9 +15,17 @@ def event_create(request):
         data = json.loads(request.body)
         event_type = data['event_type']
         event_description = data['event_description']
+        event_name = data['event_name']
+        event_venue = data['event_venue']
+        date_time = data['date_time']
+        date_time = datetime.strptime(date_time, '%m %d %Y %H:%M')
+        # print(date_time)
         # print(request.user)
         Events.objects.create(
+            event_name = event_name,
+            event_venue = event_venue,
             event_type_id =  event_type, 
+            date_of_event = date_time,
             user_id = request.user.id ,
             event_description = event_description
         )
