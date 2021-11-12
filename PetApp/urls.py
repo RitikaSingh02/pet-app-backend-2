@@ -7,6 +7,7 @@ urlpatterns = [
     path('chat/', include('Chat.urls')),
     path('pet/', include('Pet.urls')),
     path('forum/', include('Owner.urls')),
+    path('event/', include('event.urls')),
 
 
     # path('accounts/', include('Login.urls')),
