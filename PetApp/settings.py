@@ -36,7 +36,8 @@ INSTALLED_APPS = [
     'Login',
     'Owner',
     'Pet',
-    'Chat'
+    'Chat',
+    'event'
 ]
 
 MIDDLEWARE = [
