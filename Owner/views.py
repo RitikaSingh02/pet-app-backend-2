@@ -15,6 +15,7 @@ def forum_create(request):
         visibility = data['visibility']
         users = data['users'] #id of users req min users = 2 check at Frontend
         users_id = list(User.objects.filter(username__in = users).values('id'))#{'id': 72}
+        users_id.append({'id' : request.user.id})#adding the user too into the forum
 
         forum = ForumInfo.objects.create(
             forumname = forumname,
