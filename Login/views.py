@@ -63,7 +63,7 @@ def register(request):
         name = data['name']
         email = data['email'] 
         password = data['password']
-        owner = UserInfo.objects.filter(username = username).exists()
+        owner = User.objects.filter(username = username).exists()
         if owner:
             res['msg'] = 'User already exists!'
             return JsonResponse(res ,safe=False, status = 400)
@@ -75,7 +75,7 @@ def register(request):
         )
         user = User.objects.create_user(username = username  , email = email , password = password)
         user.save()
-        res['user'] = list(UserInfo.objects.filter(username = username).values('id' , 'username' , 'password' , 'email'))
+        res['user'] = list(User.objects.filter(username = username).values('id' , 'username' ,  'email'))
         pet_name = data['pet_name']
         gender = data['gender']
         breed = data['breed']
@@ -109,13 +109,13 @@ def my_login(request):
             data = json.loads(request.body)
             username = data['username']
             password = data['password']
-            user = UserInfo.objects.filter(username = username).exists()
+            user = User.objects.filter(username = username).exists()
             if user:
                 user = authenticate(username=username, password=password)
                 if user is not None:
                     if user.is_active:
                         login(request, user)
-                        owner = UserInfo.objects.get(username = username)
+                        owner = User.objects.get(username = username)
                         request.session['user_id'] =  owner.id
                         request.session['user_name'] = owner.username
                     else:
