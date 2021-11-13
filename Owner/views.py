@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 
 import json
 
-from .models import UserForum , ForumInfo
+from .models import UserForum , ForumInfo , UserConnections
 
 @login_required
 def forum_create(request):
@@ -54,3 +54,17 @@ def forum_add(request):
     res['msg'] = "User/s added to the forum Successfully"
     return JsonResponse(res , safe=False , status = 200)    
 
+@login_required
+def connections_add(request):
+    res = {}
+    if request.method == "POST":
+        data = json.loads(request.body)
+        connection_req_id = data['connection_id']
+        UserConnections.objects.create(
+            user_id = request.user.id,
+            connection_id = connection_req_id
+        )
+        res['msg'] = "User added to connections"
+        return JsonResponse(res , safe = False , status = 200)
+    res['msg'] = "Method not allowed"
+    return JsonResponse(res , safe = False , status = 405)
