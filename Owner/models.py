@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models.base import Model
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 class UserInfo(models.Model):
     username = models.CharField(max_length=200, default="NULL" , unique= True )
@@ -20,3 +21,11 @@ class UserForum(models.Model):
 class UserConnections(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE , related_name='user') 
     connection =models.ForeignKey(User, on_delete=models.CASCADE , related_name='connections') 
+
+class UserFeeds(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE) 
+    feed_img = models.URLField(null = False)
+    feed_title =  models.CharField(max_length=200 , null=False )
+    feed_caption =  models.CharField(max_length=200 , null = False )
+    feed_creation = models.DateField(auto_now=False, auto_now_add=False , default= timezone.now)
+    feed_status = models.CharField(max_length=20 , default="PENDING" )
