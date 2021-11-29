@@ -206,12 +206,12 @@ SOCIALACCOUNT_PROVIDERS = {
 # https://developers.facebook.com/apps/
 # http://127.0.0.1:8000/accounts/profile/#
 
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
-            # "hosts": [os.environ.get("redis_url" , 'redis://localhost:6379')],
-        },
-    },
-}
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels_redis.core.RedisChannelLayer",
+#         "CONFIG": {
+#             "hosts": [("127.0.0.1", 6379)],
+#             # "hosts": [os.environ.get("redis_url" , 'redis://localhost:6379')],
+#         },
+#     },
+# }
