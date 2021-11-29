@@ -215,3 +215,9 @@ SOCIALACCOUNT_PROVIDERS = {
 #         },
 #     },
 # }
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
