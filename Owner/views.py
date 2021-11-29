@@ -34,6 +34,7 @@ def forum_create(request):
                 forum_id = forum.id,
                 user_id = user['id']
             )
+        res['forum-id'] = forum.id
     else:
         res['msg'] = "Method not allowed"
         return JsonResponse(res , safe=False , status = 405)
