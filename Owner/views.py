@@ -5,7 +5,11 @@ from django.contrib.auth.decorators import login_required
 
 import json
 
-from .models import UserForum , ForumInfo , UserConnections
+from .models import UserForum , ForumInfo , UserConnections , UserFeeds
+
+import os
+import cloudinary
+import cloudinary.uploader
 
 @login_required
 def forum_create(request):
@@ -68,3 +72,61 @@ def connections_add(request):
         return JsonResponse(res , safe = False , status = 200)
     res['msg'] = "Method not allowed"
     return JsonResponse(res , safe = False , status = 405)
+
+def allowed_file(filename):
+    ALLOWED_EXTENSIONS = { 'png', 'jpg', 'jpeg'}
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def feed_img_upload(request):
+    res = {}
+    cloudinary.config( 
+    cloud_name = os.environ.get("cloud_name"),
+    api_key = os.environ.get("api_key"), 
+    api_secret = os.environ.get('api_secret')
+    )
+    if request.FILES:
+        files = request.FILES
+        for f in files:
+            if allowed_file(files[f].name):
+                upload_result = cloudinary.uploader.upload(files[f])    
+                url = upload_result['url']
+                curr_feed = UserFeeds.objects.get_or_create(
+                    user_id = request.user.id,
+                    feed_img = url
+                )
+                # print(curr_feed[0].id)
+                res['msg'] = "file upload success"
+                res['curr_feed_id'] = curr_feed[0].id
+                return JsonResponse(res , safe=False , status = 200)
+            else:
+                res['msg'] = "only .png , .jpg , .jpeg allowed"
+                return JsonResponse(res , safe= False , status = 401)
+    res['msg'] = "file upload failed"
+    return JsonResponse(res , safe=False , status = 400)
+
+@login_required
+def feed_create(request):
+    res = {}
+    if request.method == "POST":
+        data = json.loads(request.body)
+        curr_feed = data['curr_feed_id']
+        feed_title = data['feed_title']
+        feed_caption = data['feed_caption']
+        UserFeeds.objects.filter(id = curr_feed).update(
+            feed_title = feed_title,
+            feed_caption = feed_caption,
+            feed_status = "success"
+        )
+        res['msg'] = 'Feed upload sucess'
+        return JsonResponse(res , safe = False , status = 200)
+    res['msg'] = "Method not allowed"
+    return JsonResponse(res , safe = False , status = 405)
+
+@login_required
+def get_all_feed(request):
+    res = {}
+    q = list(UserFeeds.objects.filter(user_id = request.user.id , feed_status = "success").values())
+    res['feeds'] = q
+    return JsonResponse(res , safe = False , status = 200)
+    
