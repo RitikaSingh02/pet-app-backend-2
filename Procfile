@@ -1,1 +1,1 @@
-web: gunicorn PetApp.wsgi --log-file -
+web: daphne PetApp.asgi:application --port $PORT --bind 0.0.0.0
